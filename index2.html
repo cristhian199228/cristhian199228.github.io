@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apple Decay Simulation</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+            display: block;
+            margin: 20px auto;
+        }
+        #controls {
+            text-align: center;
+            margin-top: 20px;
+        }
+        #title {
+            text-align: center;
+            font-size: 24px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="title">Descomposición de Alimentos</div>
+    <canvas id="appleCanvas" width="400" height="400"></canvas>
+    <div id="controls">
+        <label for="daysInput">Días:</label>
+        <input type="number" id="daysInput" value="0" min="0" max="30">
+        <button id="increaseDays">Aumentar</button>
+        <button id="decreaseDays">Restar</button>
+    </div>
+    
+    <script>
+        const appleCanvas = document.getElementById('appleCanvas');
+        const ctx = appleCanvas.getContext('2d');
+        const appleRadius = 40;
+        let days = 0;
+
+        // Arrays para almacenar las manchas de cada manzana
+        const spotsConES = [];
+        const spotsSinES = [];
+
+        function generateSpot(x, y, radius) {
+            let spotX, spotY;
+            do {
+                spotX = x + (Math.random() - 0.5) * radius * 2;
+                spotY = y + (Math.random() - 0.5) * radius * 2;
+            } while (Math.sqrt(Math.pow(spotX - x, 2) + Math.pow(spotY - y, 2)) > radius);
+            
+            const spotSize = Math.random() * appleRadius * 0.2; // Manchas más pequeñas
+            const spotBrown = Math.floor(50 + Math.random() * 100);
+            return { spotX, spotY, spotSize, spotBrown };
+        }
+
+        function drawApple(ctx, x, y, label, decayFactor, maxDays, spots, startSpotDay) {
+            ctx.clearRect(x - appleRadius - 10, y - appleRadius - 10, appleRadius * 2 + 20, appleRadius * 2 + 40);
+
+            // Calcular el color de la manzana basado en los días y el factor de decaimiento
+            const brownFactor = Math.min((days / maxDays) * decayFactor, 1);
+            const red = Math.floor(255 * (1 - brownFactor));
+            const green = 0;
+            const blue = 0;
+            const brown = Math.floor(139 * brownFactor);
+            ctx.fillStyle = `rgb(${red + brown}, ${green + brown / 2}, ${blue})`;
+
+            // Dibujar la manzana
+            ctx.beginPath();
+            ctx.arc(x, y, appleRadius, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Dibujar el tallo
+            ctx.fillStyle = 'brown';
+            ctx.fillRect(x - 2, y - appleRadius - 20, 4, 20);
+            
+            // Dibujar la hoja
+            ctx.fillStyle = 'green';
+            ctx.beginPath();
+            ctx.moveTo(x, y - appleRadius - 20);
+            ctx.lineTo(x + 20, y - appleRadius - 40);
+            ctx.lineTo(x + 10, y - appleRadius - 20);
+            ctx.closePath();
+            ctx.fill();
+
+            // Dibujar manchas de pudrición
+            const numSpots = days >= startSpotDay ? Math.min(Math.floor(((days - startSpotDay) / (maxDays - startSpotDay)) * 10), 10) : 0; // Hasta 10 manchas según el día de inicio
+            while (spots.length < numSpots) {
+                spots.push(generateSpot(x, y, appleRadius));
+            }
+
+            spots.forEach(spot => {
+                ctx.fillStyle = `rgb(${spot.spotBrown}, ${spot.spotBrown / 2}, 0)`;
+                ctx.beginPath();
+                ctx.arc(spot.spotX, spot.spotY, spot.spotSize, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Agregar efecto de putrefacción avanzada
+            if (days > startSpotDay) {
+                for (let i = 0; i < 5; i++) {
+                    ctx.fillStyle = `rgba(139, 69, 19, ${Math.random() * 0.5})`; // Marrón con transparencia
+                    ctx.beginPath();
+                    ctx.arc(x + (Math.random() - 0.5) * appleRadius, y + (Math.random() - 0.5) * appleRadius, Math.random() * 10, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            // Dibujar etiqueta
+            ctx.font = '16px Arial';
+            ctx.fillStyle = 'black';
+            ctx.textAlign = 'center';
+            ctx.fillText(label, x, y + appleRadius + 20);
+        }
+
+        function updateApples() {
+            drawApple(ctx, 100, 200, 'con ES', 1, 30, spotsConES, 12); // La manzana con ES se pudre completamente en el día 30, manchas a partir del día 12
+            drawApple(ctx, 300, 200, 'sin ES', 1, 14, spotsSinES, 6); // La manzana sin ES se pudre completamente en el día 14, manchas a partir del día 6
+        }
+
+        // Aumentar días
+        document.getElementById('increaseDays').addEventListener('click', function() {
+            if (days < 30) {
+                days++;
+                document.getElementById('daysInput').value = days;
+                updateApples();
+            }
+        });
+
+        // Restar días (no permite valores negativos)
+        document.getElementById('decreaseDays').addEventListener('click', function() {
+            if (days > 0) {
+                days--;
+                document.getElementById('daysInput').value = days;
+                updateApples();
+            }
+        });
+
+        // Cambiar días desde el input
+        document.getElementById('daysInput').addEventListener('input', function() {
+            days = Math.min(Math.max(parseInt(this.value) || 0, 0), 30);
+            updateApples();
+        });
+
+        // Dibujar inicialmente
+        updateApples();
+    </script>
+</body>
+</html>
