@@ -1,3 +1,5 @@
+// oscillatingParticle.js
+
 class OscillatingParticle {
     constructor(x, y, size, speed) {
         this.x = x;

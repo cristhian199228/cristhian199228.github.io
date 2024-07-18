@@ -94,21 +94,23 @@ function drawAppleSurfaceCanvas() {
     appleSurfaceCtx.clearRect(0, 0, appleSurfaceCanvas.width, appleSurfaceCanvas.height);
     
     // Dibujar semicírculo rojo
-    const radius = appleSurfaceCanvas.width *1.2;
+    const radius = appleSurfaceCanvas.width * 1.2;
     appleSurfaceCtx.fillStyle = 'red';
     appleSurfaceCtx.beginPath();
     appleSurfaceCtx.arc(radius, radius, radius, Math.PI, 0); // Dibujar semicírculo
     appleSurfaceCtx.closePath();
     appleSurfaceCtx.fill();
     
-    // Dibujar partículas adheridas al semicírculo
-    drawParticlesOnAppleSurface();
+    // Dibujar partículas adheridas al semicírculo solo si el rociador está activado
+    if (spraying) {
+        drawParticlesOnAppleSurface();
+    }
 }
 
 function drawParticlesOnAppleSurface() {
-    const radius = appleSurfaceCanvas.width ;
+    const radius = appleSurfaceCanvas.width;
     for (let y = particleSpacing; y < radius; y += particleSpacing) {
-        for (let x = particleSpacing ; x < appleSurfaceCanvas.width +1; x += particleSpacing) {
+        for (let x = particleSpacing ; x < appleSurfaceCanvas.width + 1; x += particleSpacing) {
             const distance = Math.sqrt((x - radius) ** 2 + (y - radius) ** 2);
             if (distance < radius) {
                 appleSurfaceCtx.fillStyle = 'skyblue';
