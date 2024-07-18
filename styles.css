@@ -1,0 +1,57 @@
+canvas {
+    border: 1px solid black;
+    display: block;
+    margin: 0 auto;
+}
+
+.control-panel, .control-panel-electrostatic {
+    border: 1px solid black;
+    padding: 10px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.control-panel button, .control-panel-electrostatic button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+#startButton {
+    background-color: green;
+}
+
+#stopButton {
+    background-color: red;
+}
+
+#electrostaticOnButton {
+    background-color: green;
+}
+
+#electrostaticOffButton {
+    background-color: red;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.canvas-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#additionalCanvases {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

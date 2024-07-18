@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulación de Spray Electrostático</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="control-panel">
+            <h3>Tablero de Control Rociador</h3>
+            <button id="startButton">Start</button>
+            <button id="stopButton">Stop</button>
+        </div>
+        <div class="control-panel-electrostatic">
+            <h3>Sistema Electroestático</h3>
+            <button id="electrostaticOnButton">On</button>
+            <button id="electrostaticOffButton">Off</button>
+        </div>
+    </div>
+    <div class="container canvas-container">
+        <canvas id="canvas" width="800" height="600"></canvas>
+        <div id="additionalCanvases">
+            <div>Diámetro de la partícula</div>
+            <canvas id="particleSizeCanvas" width="200" height="200"></canvas>
+            <div>Manzana</div>
+            <canvas id="appleCanvas" width="200" height="200"></canvas>
+            <div>Superficie de la Manzana</div>
+            <canvas id="appleSurfaceCanvas" width="200" height="200"></canvas>
+        </div>
+    </div>
+    <script src="particle.js"></script>
+    <script src="oscillatingParticle.js"></script>
+    <script src="fallingParticle.js"></script>
+    <script src="apple.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
